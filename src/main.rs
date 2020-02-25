@@ -1,15 +1,21 @@
-use druid::widget::{Flex, Label, TextBox, WidgetExt};
-use druid::{AppLauncher, Data, Env, Lens, LocalizedString, PlatformError, Widget, WindowDesc};
+use druid::widget::{Button, Flex, Label, TextBox, WidgetExt};
+use druid::{
+    AppLauncher, Color, Data, Env, Lens, LocalizedString, PlatformError, Widget, WindowDesc,
+};
+
+const COUNT_BG: Color = Color::grey8(0x77);
 
 #[derive(Debug, Clone, Data, Lens)]
 struct MyState {
     text: String,
+    count: usize,
 }
 
 impl Default for MyState {
     fn default() -> Self {
         MyState {
             text: String::from("World!"),
+            count: 0,
         }
     }
 }
@@ -32,5 +38,18 @@ fn ui_builder() -> impl Widget<MyState> {
                 .center(),
             1.0,
         )
+        .with_child(
+            Label::new(|data: &MyState, _env: &Env| format!("Count: {}", data.count))
+                .padding(5.0)
+                .background(COUNT_BG)
+                .center(),
+            1.0,
+        )
         .with_child(TextBox::raw().lens(MyState::text).padding(5.0), 1.0)
+        .with_child(
+            Button::new("Click!", |_, count, _| *count += 1)
+                .lens(MyState::count)
+                .padding(5.0),
+            1.0,
+        )
 }
