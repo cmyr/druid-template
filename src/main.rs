@@ -36,20 +36,20 @@ fn ui_builder() -> impl Widget<MyState> {
             Label::new(|data: &MyState, _env: &Env| format!("Hello {}", data.text))
                 .padding(5.0)
                 .center(),
-            1.0,
         )
         .with_child(
             Label::new(|data: &MyState, _env: &Env| format!("Count: {}", data.count))
                 .padding(5.0)
                 .background(COUNT_BG)
                 .center(),
-            1.0,
         )
-        .with_child(TextBox::raw().lens(MyState::text).padding(5.0), 1.0)
+        .with_child(TextBox::new().lens(MyState::text).padding(5.0))
         .with_child(
-            Button::new("Click!", |_, count, _| *count += 1)
+            Button::new("Click!")
+                .on_click(|_, count, _| *count += 1)
                 .lens(MyState::count)
                 .padding(5.0),
-            1.0,
         )
+        .center()
+        .debug_paint_layout()
 }
